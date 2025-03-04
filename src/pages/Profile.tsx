@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -10,7 +9,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { User, Mail, Briefcase, GraduationCap, MapPin, Globe, Github, Linkedin, Twitter, FileEdit, Share, Download } from "lucide-react";
+import { 
+  User, Mail, Briefcase, GraduationCap, MapPin, Globe, Github, 
+  Linkedin, Twitter, FileEdit, Share, Download, Trophy, Award,
+  Flame, Medal, CheckCircle, Star, Rocket, Code, Key, Server, 
+  Database, Clock
+} from "lucide-react";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("view");
@@ -60,7 +64,26 @@ const Profile = () => {
       linkedin: "linkedin.com/in/alexjohnson",
       twitter: "twitter.com/alexjohnson",
       website: "alexjohnson.dev"
-    }
+    },
+    badges: [
+      { id: 1, name: "React Master", icon: <Code className="w-5 h-5" />, description: "Completed 10+ React projects", color: "bg-blue-500" },
+      { id: 2, name: "TypeScript Pro", icon: <Key className="w-5 h-5" />, description: "Demonstrated advanced TypeScript skills", color: "bg-blue-700" },
+      { id: 3, name: "API Wizard", icon: <Server className="w-5 h-5" />, description: "Integrated with 5+ external APIs", color: "bg-purple-600" },
+      { id: 4, name: "Database Guru", icon: <Database className="w-5 h-5" />, description: "Proficient in MongoDB and SQL", color: "bg-green-600" },
+      { id: 5, name: "7-Day Streak", icon: <Flame className="w-5 h-5" />, description: "Coded for 7 consecutive days", color: "bg-orange-500" }
+    ],
+    trophies: [
+      { id: 1, name: "Top Contributor", icon: <Trophy className="w-6 h-6 text-yellow-500" />, description: "Ranked in the top 5% of platform contributors" },
+      { id: 2, name: "Project Excellence", icon: <Award className="w-6 h-6 text-blue-500" />, description: "Project featured on platform homepage" },
+      { id: 3, name: "Coding Challenge Champion", icon: <Medal className="w-6 h-6 text-amber-500" />, description: "Won monthly coding challenge" }
+    ],
+    stats: [
+      { name: "Projects Completed", value: 15, icon: <CheckCircle className="w-5 h-5 text-green-500" /> },
+      { name: "Longest Streak", value: "14 days", icon: <Flame className="w-5 h-5 text-orange-500" /> },
+      { name: "Hours Logged", value: 342, icon: <Clock className="w-5 h-5 text-blue-500" /> },
+      { name: "Current XP", value: 2750, icon: <Star className="w-5 h-5 text-yellow-500" /> },
+      { name: "Current Level", value: 8, icon: <Rocket className="w-5 h-5 text-purple-500" /> }
+    ]
   });
 
   const handleProfileChange = (e) => {
@@ -104,6 +127,33 @@ const Profile = () => {
         ...prev.links,
         [platform]: value
       }
+    }));
+  };
+
+  const handleBadgeChange = (id, field, value) => {
+    setProfile(prev => ({
+      ...prev,
+      badges: prev.badges.map(badge => 
+        badge.id === id ? { ...badge, [field]: value } : badge
+      )
+    }));
+  };
+
+  const handleTrophyChange = (id, field, value) => {
+    setProfile(prev => ({
+      ...prev,
+      trophies: prev.trophies.map(trophy => 
+        trophy.id === id ? { ...trophy, [field]: value } : trophy
+      )
+    }));
+  };
+
+  const handleStatChange = (index, field, value) => {
+    setProfile(prev => ({
+      ...prev,
+      stats: prev.stats.map((stat, i) => 
+        i === index ? { ...stat, [field]: value } : stat
+      )
     }));
   };
 
@@ -172,21 +222,66 @@ const Profile = () => {
                   </div>
                 </div>
                 
+                <div className="mt-8 grid grid-cols-2 sm:grid-cols-5 gap-4">
+                  {profile.stats.map((stat, index) => (
+                    <div key={index} className="glass-card p-3 rounded-lg text-center">
+                      <div className="flex justify-center">{stat.icon}</div>
+                      <p className="text-lg font-semibold mt-1">{stat.value}</p>
+                      <p className="text-xs text-muted-foreground">{stat.name}</p>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="mt-8">
+                  <h3 className="text-xl font-medium mb-4 flex items-center gap-2">
+                    <Trophy className="h-5 w-5 text-yellow-500" />
+                    Achievements
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {profile.trophies.map(trophy => (
+                      <div key={trophy.id} className="glass-card p-4 rounded-lg border border-primary/10">
+                        <div className="flex items-start gap-3">
+                          {trophy.icon}
+                          <div>
+                            <h4 className="font-medium">{trophy.name}</h4>
+                            <p className="text-sm text-muted-foreground">{trophy.description}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="mt-8">
+                  <h3 className="text-xl font-medium mb-4 flex items-center gap-2">
+                    <Award className="h-5 w-5 text-blue-500" />
+                    Skills & Badges
+                  </h3>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {profile.badges.map(badge => (
+                      <div 
+                        key={badge.id} 
+                        className={`inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium text-white ${badge.color}`}
+                        title={badge.description}
+                      >
+                        <span className="mr-1">{badge.icon}</span>
+                        {badge.name}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.skills.map((skill, index) => (
+                      <Badge key={index} variant="secondary">{skill}</Badge>
+                    ))}
+                  </div>
+                </div>
+                
                 <Separator className="my-6" />
                 
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-xl font-medium mb-2">About</h3>
                     <p>{profile.about}</p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-xl font-medium mb-2">Skills</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {profile.skills.map((skill, index) => (
-                        <Badge key={index} variant="secondary">{skill}</Badge>
-                      ))}
-                    </div>
                   </div>
                   
                   <div>
@@ -418,6 +513,65 @@ const Profile = () => {
                           value={project.technologies.join(', ')} 
                           onChange={(e) => handleProjectChange(project.id, 'technologies', e.target.value.split(',').map(t => t.trim()))} 
                         />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <Separator className="my-6" />
+                
+                <h3 className="text-xl font-medium mb-6">Achievements & Stats</h3>
+                
+                <h4 className="text-lg font-medium mb-4">Badges</h4>
+                <div className="space-y-4 mb-6">
+                  {profile.badges.map(badge => (
+                    <div key={badge.id} className="p-4 border border-border rounded-md">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="space-y-2">
+                          <label className="block font-medium">Badge Name</label>
+                          <Input 
+                            value={badge.name} 
+                            onChange={(e) => handleBadgeChange(badge.id, 'name', e.target.value)} 
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="block font-medium">Badge Color</label>
+                          <Input 
+                            value={badge.color} 
+                            onChange={(e) => handleBadgeChange(badge.id, 'color', e.target.value)} 
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="block font-medium">Description</label>
+                          <Input 
+                            value={badge.description} 
+                            onChange={(e) => handleBadgeChange(badge.id, 'description', e.target.value)} 
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <h4 className="text-lg font-medium mb-4">Trophies</h4>
+                <div className="space-y-4 mb-6">
+                  {profile.trophies.map(trophy => (
+                    <div key={trophy.id} className="p-4 border border-border rounded-md">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="block font-medium">Trophy Name</label>
+                          <Input 
+                            value={trophy.name} 
+                            onChange={(e) => handleTrophyChange(trophy.id, 'name', e.target.value)} 
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="block font-medium">Description</label>
+                          <Input 
+                            value={trophy.description} 
+                            onChange={(e) => handleTrophyChange(trophy.id, 'description', e.target.value)} 
+                          />
+                        </div>
                       </div>
                     </div>
                   ))}
