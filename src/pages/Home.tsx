@@ -13,7 +13,9 @@ const Home = () => {
       <Navbar />
       <main className="flex-1">
         <Hero />
-        <AuthButtons />
+        <div id="auth-section">
+          <AuthButtons />
+        </div>
         <FeaturedProjects />
         <Testimonials />
       </main>

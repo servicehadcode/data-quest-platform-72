@@ -1,14 +1,16 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Search, User } from "lucide-react";
+import { Menu, X, Search, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/context/AuthContext";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -68,12 +70,27 @@ const Navbar = () => {
             </Button>
           </nav>
           <div className="flex items-center space-x-2 ml-4">
-            <Button size="sm" asChild>
-              <Link to="/profile">
-                <User className="h-4 w-4 mr-2" />
-                Your Profile
-              </Link>
-            </Button>
+            {isAuthenticated ? (
+              <>
+                <Button size="sm" asChild>
+                  <Link to="/profile">
+                    <User className="h-4 w-4 mr-2" />
+                    Your Profile
+                  </Link>
+                </Button>
+                <Button size="sm" variant="outline" onClick={logout}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Button size="sm" asChild>
+                <a href="#auth-section">
+                  <User className="h-4 w-4 mr-2" />
+                  Login / Register
+                </a>
+              </Button>
+            )}
           </div>
         </div>
 
@@ -118,13 +135,28 @@ const Navbar = () => {
               <Link to="/projects">Learn Projects</Link>
             </Button>
           </nav>
-          <div className="flex items-center mt-4">
-            <Button className="w-full" asChild>
-              <Link to="/profile">
-                <User className="h-4 w-4 mr-2" />
-                Your Profile
-              </Link>
-            </Button>
+          <div className="flex flex-col space-y-2 mt-4">
+            {isAuthenticated ? (
+              <>
+                <Button className="w-full justify-start" asChild>
+                  <Link to="/profile">
+                    <User className="h-4 w-4 mr-2" />
+                    Your Profile
+                  </Link>
+                </Button>
+                <Button className="w-full justify-start" variant="outline" onClick={logout}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Button className="w-full justify-start" asChild>
+                <a href="#auth-section">
+                  <User className="h-4 w-4 mr-2" />
+                  Login / Register
+                </a>
+              </Button>
+            )}
           </div>
         </div>
       )}
